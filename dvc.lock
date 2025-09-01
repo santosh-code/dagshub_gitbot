@@ -1,0 +1,22 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/winequality-red.csv
+      hash: md5
+      md5: 2daeecee174368f8a33b82c8cccae3a5
+      size: 84199
+    - path: src/train.py
+      hash: md5
+      md5: 17be908932d843b49694434600ef554c
+      size: 1804
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 484dd7ece497663935525b31bbbb7b99
+      size: 22
+    - path: models/model.pkl
+      hash: md5
+      md5: bafc853bd5a5a868859401a94e6b75e6
+      size: 1407
