@@ -1,0 +1,36 @@
+name: DVC Auto Push to DagsHub   # Librarian job title
+
+on:
+  push:
+    branches: [ "main" ]         # Librarian works whenever the main catalog is updated
+permissions:
+    contents:write
+jobs:
+  dvc-sync:
+    runs-on: ubuntu-latest       # Librarian works on a clean Ubuntu desk
+
+    steps:
+      # Step 1: Checkout the repo (the catalog of books and rules)
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python (needed for DVC tools)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      # Step 3: Install DVC (shelf manager)
+      - name: Install DVC
+        run: pip install dvc[all]
+
+      # Step 4: Configure shelves (connect to DagsHub remote)
+      - name: Configure DVC remote
+        run: |
+          dvc remote modify origin --local auth basic
+          dvc remote modify origin --local user ${{ secrets.DAGSHUB_USER }}
+          dvc remote modify origin --local password ${{ secrets.DAGSHUB_TOKEN }}
+
+      # Step 5: Librarian shelves new books automatically
+      - name: Push Data to DagsHub
+        run: dvc push
