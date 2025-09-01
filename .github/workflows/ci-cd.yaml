@@ -28,9 +28,10 @@ jobs:
       - name: Install DVC
         run: pip install dvc[all]
 
-      # Step 4: Configure DVC remote (connect shelves in DagsHub)
+       # Step 4: Configure DVC remote (connect shelves in DagsHub)
       - name: Configure DVC remote
         run: |
+          dvc remote add origin https://dagshub.com/${{ secrets.DAGSHUB_USER }}/dagshub_gitbot.dvc
           dvc remote modify origin --local auth basic
           dvc remote modify origin --local user ${{ secrets.DAGSHUB_USER }}
           dvc remote modify origin --local password ${{ secrets.DAGSHUB_TOKEN }}
